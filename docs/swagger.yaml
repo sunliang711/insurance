@@ -1,0 +1,72 @@
+basePath: /
+definitions:
+  types.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+host: aliyun.eagle711.win:8081
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server Petstore server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /location:
+    get:
+      description: 返回全国省市列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 省市列表
+          schema:
+            $ref: '#/definitions/types.Response'
+            type: object
+      summary: 全国省市
+      tags:
+      - 全国省市
+  /reason:
+    get:
+      consumes:
+      - application/json
+      description: TODO
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: COMMENT
+          schema:
+            $ref: '#/definitions/types.Response'
+            type: object
+      summary: 出险原因
+      tags:
+      - 出险原因
+  /type:
+    get:
+      consumes:
+      - application/json
+      description: TODO
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: COMMENT
+          schema:
+            $ref: '#/definitions/types.Response'
+            type: object
+      summary: 出险类型
+      tags:
+      - 出险类型
+swagger: "2.0"

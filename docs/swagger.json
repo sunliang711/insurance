@@ -1,0 +1,107 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server Petstore server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "aliyun.eagle711.win:8081",
+    "basePath": "/",
+    "paths": {
+        "/location": {
+            "get": {
+                "description": "返回全国省市列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "全国省市"
+                ],
+                "summary": "全国省市",
+                "responses": {
+                    "200": {
+                        "description": "省市列表",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/reason": {
+            "get": {
+                "description": "TODO",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "出险原因"
+                ],
+                "summary": "出险原因",
+                "responses": {
+                    "200": {
+                        "description": "COMMENT",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/type": {
+            "get": {
+                "description": "TODO",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "出险类型"
+                ],
+                "summary": "出险类型",
+                "responses": {
+                    "200": {
+                        "description": "COMMENT",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

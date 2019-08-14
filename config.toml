@@ -1,0 +1,5 @@
+[server]
+port = 8081
+
+[mysql]
+dsn="root:@tcp(localhost)/dkms"
