@@ -1,5 +1,10 @@
 basePath: /
 definitions:
+  types.Claim:
+    properties:
+      name:
+        type: string
+    type: object
   types.Response:
     properties:
       code:
@@ -23,6 +28,35 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /claim:
+    post:
+      consumes:
+      - application/json
+      description: 理赔申请
+      parameters:
+      - description: COMMENT
+        in: body
+        name: claim
+        required: true
+        schema:
+          $ref: '#/definitions/types.Claim'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: COMMENT
+          schema:
+            $ref: '#/definitions/types.Response'
+            type: object
+        "400":
+          description: COMMENT
+          schema:
+            $ref: '#/definitions/types.Response'
+            type: object
+      summary: 理赔申请
+      tags:
+      - 理赔申请
   /location:
     get:
       description: 返回全国省市列表

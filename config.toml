@@ -1,4 +1,5 @@
 [server]
+loglevel = "debug"
 port = 8081
 
 [mysql]

@@ -1,8 +1,13 @@
 package handler
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
+	"github.com/sunliang711/insurance/model"
 	"github.com/sunliang711/insurance/types"
+	"github.com/sunliang711/insurance/utils"
 )
 
 // Location 全国省市
@@ -24,8 +29,8 @@ func Location(c *gin.Context) {
 	// }
 	// c.JSON(200, types.Response{0, "OK", proCity})
 	c.JSON(200, types.Response{
-		Code: 0,
-		Msg:  "ok",
+		Code: types.OK,
+		Msg:  "OK",
 		Data: types.ProCity,
 	})
 }
@@ -43,12 +48,12 @@ func Location(c *gin.Context) {
 // 2019/08/12 10:10:32
 func Reason(c *gin.Context) {
 	options := []types.Option{
-		{"交通事故", "1"},
-		{"住院", "2"},
-		{"航班延误", "3"},
+		{Label: "交通事故", Value: "1"},
+		{Label: "住院", Value: "2"},
+		{Label: "航班延误", Value: "3"},
 	}
 	c.JSON(200, types.Response{
-		0, "OK", options,
+		Code: types.OK, Msg: "OK", Data: options,
 	})
 }
 
@@ -65,16 +70,80 @@ func Reason(c *gin.Context) {
 // 2019/08/12 10:17:20
 func Typ(c *gin.Context) {
 	options := []types.Option{
-		{"意外", "1"},
-		{"疾病", "2"},
+		{Label: "意外", Value: "1"},
+		{Label: "疾病", Value: "2"},
 	}
 	c.JSON(200, types.Response{
-		0, "OK", options,
+		Code: types.OK, Msg: "OK", Data: options,
 	})
 }
 
-// DeviceAuth 核赔设备授权
+// Claim TODO
+// @Summary 理赔申请
+// @Tags 理赔申请
+// @Description 理赔申请
+// @Accept  json
+// @Produce  json
+// @Param claim body types.Claim true "COMMENT"
+// @Success 200 {object} types.Response "COMMENT"
+// @Failure 400 {object} types.Response "COMMENT"
+// @Router /claim [post]
+// 2019/08/14 11:36:02
+// Claim 理赔申请
+// 2019/08/14 11:35:40
+func Claim(c *gin.Context) {
+	log.Debugf("Claim handler")
+	var claim types.Claim
+	if err := c.BindJSON(&claim); err != nil {
+		c.JSON(400, types.Response{
+			Code: types.BadRequest, Msg: "request format error", Data: nil,
+		})
+		log.Error("request format error")
+		return
+	}
+	log.Debugf("claim: %+v", claim)
+	if err := model.AddClaim(&claim); err != nil {
+		c.JSON(500, types.Response{
+			Code: types.ServerInternalError, Msg: "server internal error", Data: nil,
+		})
+		log.Error("server internal error")
+		return
+	}
+	c.JSON(200, types.Response{
+		Code: types.OK, Msg: "OK", Data: nil,
+	})
+}
+
+// Decrypt 接受decrypt数据并揭秘
+// data":[{"capsule":"QmRuNX95x4ZXqpCcTtJfoukW3jyFo6yLox62wBiZCPYc6t","ciphertext":"QmUid62eMk1Y6oDEYfXo7oiQjTtzv17J889qjhDHnBmaMG","filename":"1565875831_0_sun.png","decrypt_mode":"1","deckey":""},{"capsule":"QmRj3vPidHbXwevBHRecEFuHQYRQozL3D9bHdsX4qc5Q6X","ciphertext":"QmbPmtrwiM487zQyRaVPUwCoAKjJRmax1F5Tyk5d6eqGv1","filename":"1565882396_0_sun.png","decrypt_mode":"1","deckey":""},{"capsule":"QmaEwAfaVgn5Dxq8b1gdpTHeXtG4wjDHhS9mpSqhxjBSbZ","ciphertext":"QmXN6wrTYbjESafbgLqLgARaUoyFE6kqd7yau25CJAmqkj","filename":"1565882400_0_sun.png","decrypt_mode":"1","deckey":""},{"capsule":"QmdMzJT1U8ReKDyZHkVJKA8S87dWjnnc5pxqVnJR3i6D7C","ciphertext":"QmbpqXvphcEsHG979J1g6gtR9jEJdTdiULfLxv1P5CWJ6Q","filename":"1565882403_0_sun.png","decrypt_mode":"1","deckey":""},{"capsule":"QmNmL3iuQLjkkbVyyn3CpShJCmBFxsNkJ9oWpuYn6YAfZA","ciphertext":"QmYSCEdPgkovRbEXjo5X7iQmPLDsJU4iCGRj2WYVLsbe4V","filename":"1565882407_0_sun.png","decrypt_mode":"1","deckey":""}]}
+//{"capsule":"","ciphertext":"","filename":"","decrypt_mode":"1","deckey":""}
 // 2019/08/12 10:18:51
-func DeviceAuth(c *gin.Context) {
+func Decrypt(c *gin.Context) {
+	var dinput []types.DecryptInput
+	if err := c.BindJSON(&dinput); err != nil {
+		msg := fmt.Sprintf("Bad request data")
+		c.JSON(400, types.Response{
+			Code: 1,
+			Msg:  msg,
+		})
+		log.Error(msg)
+		return
+	}
+	log.Debugf("decryptInput: %+v", dinput)
+
+	c.JSON(200, types.Response{
+		Code: 0,
+		Msg:  "OK",
+	})
+	for _, item := range dinput {
+		item.DecKey = types.SK
+
+		//call decrypt api
+		//TODO
+		utils.PostJson("http://localhost:5000/decrypt", map[string]string{
+			"token": "burenshizheshigesha",
+		}, item)
+
+	}
 
 }

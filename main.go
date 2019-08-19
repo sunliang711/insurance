@@ -8,7 +8,9 @@ import (
 	_ "github.com/sunliang711/insurance/config"
 	"github.com/sunliang711/insurance/handler"
 	"github.com/sunliang711/insurance/model"
+	"github.com/sunliang711/insurance/utils"
 
+	log "github.com/sirupsen/logrus"
 	_ "github.com/sunliang711/insurance/docs"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -40,6 +42,10 @@ func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(gin.Logger())
+
+	log.SetLevel(utils.LogLevel(viper.GetString("server.loglevel")))
 
 	corConfig := cors.DefaultConfig()
 	corConfig.AllowAllOrigins = true
@@ -48,6 +54,9 @@ func main() {
 	router.GET("/location", handler.Location)
 	router.GET("/reason", handler.Reason)
 	router.GET("/type", handler.Typ)
+	router.POST("/claim", handler.Claim)
+	router.POST("/decrypt", handler.Decrypt)
+	//swagger handler
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	addr := fmt.Sprintf(":%d", viper.GetInt("server.port"))

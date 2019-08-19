@@ -1,6 +1,7 @@
 package types
 
-type code int
-const(
-	OK code = iota
+const (
+	OK int = iota
+	BadRequest
+	ServerInternalError
 )
